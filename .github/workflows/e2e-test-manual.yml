@@ -77,7 +77,21 @@ jobs:
       run: npm ci
       working-directory: tests/e2e
 
+    - name: Get Used Playwright version
+      id: playwright-version
+      run: |
+        node -e "console.log('x=' + JSON.parse(require('fs').readFileSync('package-lock.json', 'utf8')).packages['node_modules/@playwright/test'].version);" >> $GITHUB_OUTPUT
+      working-directory: tests/e2e
+
+    - name: Get Playwright browser from cache
+      id: cache-playwright
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.x }}
+
     - name: Install Playwright Browsers
+      if: ${{ steps.cache-playwright.outputs.cache-hit != 'true' }}
       run: npx playwright install chromium --with-deps
       working-directory: tests/e2e
 
