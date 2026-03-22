@@ -80,6 +80,8 @@ jobs:
       working-directory: tests/e2e
 
     - name: Run Playwright setup tests (sequential)
+      env:
+        E2E_TEST_VIDEO: ${{ case(inputs.record_video, 'retain-on-failure', 'off') }}
       run: |
         if [ -n "${{ inputs.test_filter }}" ]; then
           echo "Running filtered tests: ${{ inputs.test_filter }}"
@@ -91,6 +93,8 @@ jobs:
 
     - name: Run Playwright validation tests (concurrent)
       if: ${{ !inputs.test_filter }}
+      env:
+        E2E_TEST_VIDEO: ${{ case(inputs.record_video, 'retain-on-failure', 'off') }}
       run: npx playwright test formulize-core/validate --workers=4 --fully-parallel
       working-directory: tests/e2e
 
