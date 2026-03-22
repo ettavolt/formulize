@@ -25,9 +25,6 @@ on:
         default: ''
         type: string
 
-env:
-  GITHUB_TOKEN: ${{ github.token }}
-
 jobs:
   manual-e2e-test-run:
     runs-on: ubuntu-latest
