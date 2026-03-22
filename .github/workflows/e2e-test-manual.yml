@@ -8,11 +8,6 @@ on:
         required: true
         default: 'master'
         type: string
-      skip_docker_build:
-        description: 'Skip Docker rebuild (use existing containers)'
-        required: false
-        default: false
-        type: boolean
       test_filter:
         description: 'Run specific tests (optional - use Playwright test filters)'
         required: false
@@ -24,11 +19,6 @@ on:
         description: 'What to checkout'
         required: true
         type: string
-      skip_docker_build:
-        description: 'Skip Docker rebuild (use existing containers)'
-        required: false
-        default: false
-        type: boolean
       test_filter:
         description: 'Run specific tests (optional - use Playwright test filters)'
         required: false
@@ -59,19 +49,9 @@ jobs:
       run: |
         chmod 777 trust uploads modules templates_c cache tokens logs modules/formulize/cache modules/formulize/code modules/formulize/export modules/formulize/language/english/mail_template modules/formulize/queue modules/formulize/temp modules/formulize/templates/screens modules/formulize/upload mainfile.php ~/work/formulize/formulize
 
-    - name: Stop existing containers (if any)
-      run: |
-        docker compose down --remove-orphans || true
-
     - name: Run Docker Compose up
       run: |
-        if [ "${{ inputs.skip_docker_build }}" == "false" ]; then
-          echo "Building and starting containers..."
-          docker compose up -d --build
-        else
-          echo "Starting existing containers..."
           docker compose up -d
-        fi
 
     - name: Install dependencies
       run: npm ci
