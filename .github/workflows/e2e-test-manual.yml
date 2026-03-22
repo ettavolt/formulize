@@ -8,11 +8,6 @@ on:
         required: true
         default: 'master'
         type: string
-      test_filter:
-        description: 'Run specific tests (optional - use Playwright test filters)'
-        required: false
-        default: ''
-        type: string
   workflow_call:
     inputs:
       ref:
@@ -21,9 +16,12 @@ on:
         type: string
       test_filter:
         description: 'Run specific tests (optional - use Playwright test filters)'
-        required: false
         default: ''
         type: string
+      record_video:
+        description: 'Record page video as the tests are run'
+        default: false
+        type: boolean
 
 jobs:
   manual-e2e-test-run:
